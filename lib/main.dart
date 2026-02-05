@@ -8,18 +8,18 @@ import 'ui/screens/preferences_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   const endpoint = String.fromEnvironment(
     'SUPABASE_URL',
-    defaultValue: 'https://your-project.supabase.co',
+    defaultValue: 'https://tufughmpkiyxrvbaogmw.supabase.co',
   );
   const apiKey = String.fromEnvironment(
     'SUPABASE_ANON_KEY',
-    defaultValue: 'your-anon-key-here',
+    defaultValue: 'sb_publishable_-aJ18pIaEziZvHagSdRjgw_BsAJeLPa',
   );
-  
+
   await DataRepository().setup(endpoint, apiKey);
-  
+
   runApp(const QuizSwipeApp());
 }
 
@@ -69,7 +69,7 @@ class QuizSwipeApp extends StatelessWidget {
           ),
         ),
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         elevation: 3,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
@@ -160,7 +160,7 @@ class _AppShellState extends State<AppShell> {
               final idx = entry.key;
               final dest = entry.value;
               final isActive = idx == _navIndex;
-              
+
               return _buildNavButton(
                 iconData: isActive ? dest.selectedIconData : dest.iconData,
                 labelText: dest.labelText,
@@ -187,8 +187,8 @@ class _AppShellState extends State<AppShell> {
         curve: Curves.easeInOut,
         padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 14),
         decoration: BoxDecoration(
-          color: isActive 
-              ? const Color(0xFF5C6BC0).withOpacity(0.15) 
+          color: isActive
+              ? const Color(0xFF5C6BC0).withOpacity(0.15)
               : Colors.transparent,
           borderRadius: BorderRadius.circular(20),
         ),
@@ -197,7 +197,8 @@ class _AppShellState extends State<AppShell> {
           children: [
             Icon(
               iconData,
-              color: isActive ? const Color(0xFF5C6BC0) : const Color(0xFF9E9E9E),
+              color:
+                  isActive ? const Color(0xFF5C6BC0) : const Color(0xFF9E9E9E),
               size: 28,
             ),
             if (isActive) ...[

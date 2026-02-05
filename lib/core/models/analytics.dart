@@ -16,7 +16,7 @@ class Analytics {
 
   factory Analytics.fromMap(Map<String, dynamic> data) {
     return Analytics(
-      quizUid: data['question_id'] as String,
+      quizUid: data['question_id'].toString(),
       distribution: Map<String, int>.from(data['answer_counts'] as Map),
       totalCount: data['total_answers'] as int,
     );

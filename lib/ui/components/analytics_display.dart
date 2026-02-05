@@ -18,7 +18,7 @@ class AnalyticsDisplay extends StatefulWidget {
   State<AnalyticsDisplay> createState() => _AnalyticsDisplayState();
 }
 
-class _AnalyticsDisplayState extends State<AnalyticsDisplay> 
+class _AnalyticsDisplayState extends State<AnalyticsDisplay>
     with SingleTickerProviderStateMixin {
   late AnimationController _animCtrl;
   late Animation<double> _fadeAnim;
@@ -31,14 +31,14 @@ class _AnalyticsDisplayState extends State<AnalyticsDisplay>
       vsync: this,
       duration: const Duration(milliseconds: 1400),
     );
-    
+
     _fadeAnim = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: _animCtrl,
         curve: const Interval(0.0, 0.5, curve: Curves.easeIn),
       ),
     );
-    
+
     _slideAnim = Tween<Offset>(
       begin: const Offset(0, 0.15),
       end: Offset.zero,
@@ -48,9 +48,9 @@ class _AnalyticsDisplayState extends State<AnalyticsDisplay>
         curve: const Interval(0.2, 1.0, curve: Curves.easeOutCubic),
       ),
     );
-    
+
     _animCtrl.forward();
-    
+
     Future.delayed(const Duration(seconds: 6), () {
       if (mounted) widget.onNext();
     });
@@ -149,7 +149,7 @@ class _AnalyticsDisplayState extends State<AnalyticsDisplay>
 
   Widget _renderUserChoice() {
     final ratio = widget.data.calculateRatio(widget.userChoice);
-    
+
     return Container(
       padding: const EdgeInsets.all(28),
       decoration: BoxDecoration(
@@ -230,7 +230,7 @@ class _AnalyticsDisplayState extends State<AnalyticsDisplay>
   Widget _renderChartSection() {
     final sortedData = widget.data.distribution.entries.toList()
       ..sort((a, b) => b.value.compareTo(a.value));
-    
+
     if (sortedData.isEmpty) {
       return const Center(child: Text('Not enough data yet'));
     }
@@ -289,7 +289,7 @@ class _AnalyticsDisplayState extends State<AnalyticsDisplay>
           final idx = e.key;
           final entry = e.value;
           final pct = (entry.value / widget.data.totalCount) * 100;
-          
+
           return PieChartSectionData(
             color: palette[idx % palette.length],
             value: entry.value.toDouble(),
@@ -309,7 +309,7 @@ class _AnalyticsDisplayState extends State<AnalyticsDisplay>
   Widget _renderBar(String choice, int count) {
     final pct = (count / widget.data.totalCount) * 100;
     final isUserChoice = choice == widget.userChoice;
-    
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 18),
       child: Column(
@@ -333,8 +333,11 @@ class _AnalyticsDisplayState extends State<AnalyticsDisplay>
                         choice,
                         style: TextStyle(
                           fontSize: 17,
-                          fontWeight: isUserChoice ? FontWeight.w800 : FontWeight.w600,
-                          color: isUserChoice ? const Color(0xFF1A237E) : const Color(0xFF424242),
+                          fontWeight:
+                              isUserChoice ? FontWeight.w800 : FontWeight.w600,
+                          color: isUserChoice
+                              ? const Color(0xFF1A237E)
+                              : const Color(0xFF424242),
                         ),
                       ),
                     ),
@@ -359,7 +362,9 @@ class _AnalyticsDisplayState extends State<AnalyticsDisplay>
               minHeight: 14,
               backgroundColor: Colors.grey.shade200,
               valueColor: AlwaysStoppedAnimation(
-                isUserChoice ? const Color(0xFF5C6BC0) : const Color(0xFFBDBDBD),
+                isUserChoice
+                    ? const Color(0xFF5C6BC0)
+                    : const Color(0xFFBDBDBD),
               ),
             ),
           ),
@@ -370,6 +375,48 @@ class _AnalyticsDisplayState extends State<AnalyticsDisplay>
 
   Widget _renderInsight() {
     final ratio = widget.data.calculateRatio(widget.userChoice);
+
+    if (widget.data.distribution.isEmpty) {
+      return Container(
+        padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          color: Colors.amber.shade50,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: Colors.amber.shade300, width: 2.5),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(Icons.emoji_objects_rounded,
+                    color: Colors.amber.shade800, size: 28),
+                const SizedBox(width: 12),
+                const Text(
+                  'Insight',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w800,
+                    color: Color(0xFF424242),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 14),
+            const Text(
+              "You're the first to answer this question. Check back later to see how others respond!",
+              style: TextStyle(
+                fontSize: 16,
+                height: 1.6,
+                color: Color(0xFF424242),
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     final topChoice = widget.data.distribution.entries
         .reduce((a, b) => a.value > b.value ? a : b);
     final isTopChoice = topChoice.key == widget.userChoice;
@@ -386,7 +433,8 @@ class _AnalyticsDisplayState extends State<AnalyticsDisplay>
         children: [
           Row(
             children: [
-              Icon(Icons.emoji_objects_rounded, color: Colors.amber.shade800, size: 28),
+              Icon(Icons.emoji_objects_rounded,
+                  color: Colors.amber.shade800, size: 28),
               const SizedBox(width: 12),
               const Text(
                 'Insight',

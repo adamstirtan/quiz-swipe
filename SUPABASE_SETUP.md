@@ -1,5 +1,7 @@
 # QuizSwipe Database Schema
 
+gortep-kYftyw-banju9
+
 ## Supabase Setup Instructions
 
 ### 1. Create Tables
@@ -67,11 +69,11 @@ BEGIN
       ), '{}'::json
     ),
     'total_answers', COALESCE(
-      (SELECT COUNT(*)::int FROM answers WHERE question_id = question_id_param), 
+      (SELECT COUNT(*)::int FROM answers WHERE question_id = question_id_param),
       0
     )
   ) INTO result;
-  
+
   RETURN result;
 END;
 $$ LANGUAGE plpgsql;
@@ -199,6 +201,7 @@ INSERT INTO questions (text, type, min_value, max_value) VALUES
 ### 5. Enable Anonymous Authentication
 
 In your Supabase Dashboard:
+
 1. Go to Authentication > Settings
 2. Enable "Anonymous sign-ins"
 
@@ -211,5 +214,6 @@ In your Supabase Dashboard:
 ### 7. Configure the App
 
 Add these to your environment or replace in main.dart:
+
 - SUPABASE_URL=your-project-url
 - SUPABASE_ANON_KEY=your-anon-key
