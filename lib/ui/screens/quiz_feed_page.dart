@@ -197,7 +197,7 @@ class _QuizFeedPageState extends State<QuizFeedPage> {
                      size: 20),
                 const SizedBox(width: 8),
                 Text(
-                  '${sessionMgr.allItems.length - (activeQuiz?.uid.hashCode ?? 0) % 50}',
+                  '${sessionMgr.allItems.length}',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w800,

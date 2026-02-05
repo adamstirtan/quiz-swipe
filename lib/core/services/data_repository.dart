@@ -31,7 +31,7 @@ class DataRepository {
 
       return (result as List).map((item) => QuizItem.fromMap(item)).toList();
     } catch (error) {
-      print('Fetch error: $error');
+      debugPrint('Fetch error: $error');
       return [];
     }
   }
@@ -40,7 +40,7 @@ class DataRepository {
     try {
       await _db.from('answers').insert(record.toMap());
     } catch (error) {
-      print('Record error: $error');
+      debugPrint('Record error: $error');
     }
   }
 
@@ -52,7 +52,7 @@ class DataRepository {
         return Analytics.fromMap(result);
       }
     } catch (error) {
-      print('Analytics error: $error');
+      debugPrint('Analytics error: $error');
     }
 
     return Analytics(quizUid: quizUid, distribution: {}, totalCount: 0);
@@ -67,7 +67,7 @@ class DataRepository {
         });
       }
     } catch (error) {
-      print('Sync error: $error');
+      debugPrint('Sync error: $error');
     }
   }
 
@@ -78,7 +78,7 @@ class DataRepository {
         await _db.from('user_profiles').delete().eq('device_id', _deviceIdentifier);
       }
     } catch (error) {
-      print('Purge error: $error');
+      debugPrint('Purge error: $error');
     }
   }
 }

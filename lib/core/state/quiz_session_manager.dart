@@ -28,7 +28,7 @@ class QuizSessionManager with ChangeNotifier {
       final batch = await _repo.fetchBatch(size: 10, skip: _itemQueue.length);
       _itemQueue.addAll(batch);
     } catch (error) {
-      print('Load batch error: $error');
+      debugPrint('Load batch error: $error');
     }
 
     _fetching = false;

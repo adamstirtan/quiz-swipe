@@ -8,6 +8,7 @@ Run these SQL commands in your Supabase SQL editor:
 
 ```sql
 -- Questions table
+-- Note: 'slider' type in database maps to 'range' in Dart code (QuizItemType.range)
 CREATE TABLE questions (
   id BIGSERIAL PRIMARY KEY,
   text TEXT NOT NULL,
