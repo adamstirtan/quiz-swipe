@@ -1,102 +1,217 @@
-You are a highly skilled coding agent tasked with building the Minimum Viable Product (MVP) for a mobile app called "QuizSwipe". This app is inspired by Tinder's swipe mechanics but focused on answering questions in a fun, addictive way. Users swipe through questions, provide answers via swipes/taps/sliders, and immediately see engaging infographics with stats like percentages, local comparisons, and quirky insights. The goal is to make it feel like swiping through short videos—quick, rewarding, and habit-forming.
+# QuizSwipe - Mobile Quiz App MVP
 
-### App Overview and Core Objectives
+A Tinder-like swipe interface for answering engaging questions and seeing instant analytics.
 
-- **Target Platform**: Mobile-first, cross-platform (iOS and Android). Use Flutter for efficiency, as it allows a single codebase with native performance for gestures and UI.
-- **User Experience Goal**: Low-friction, anonymous fun. No mandatory sign-up; users start swiping immediately. Emphasize speed: Each question-answer-infographic cycle should take <10 seconds.
-- **Key Principles**:
-  - Anonymity: All answers are anonymous; no personal data tied to responses publicly.
-  - Privacy: Collect optional user info (e.g., age group, location) gradually and consensually for better stats.
-  - Engagement: Infinite scroll of questions, with basic gamification to encourage daily use.
-  - Scalability: Design for potential viral growth, but MVP focuses on core loop.
-- **MVP Scope**: Limit to essential features only. Avoid extras like user matching, debates, or advanced analytics. Aim for a basic prototype testable on emulators/devices.
+## Overview
 
-### Tech Stack Recommendations
+QuizSwipe is a mobile-first app built with Flutter that lets users answer fun, thought-provoking questions through an intuitive swipe interface. After each response, users see beautiful data visualizations showing how their answer compares to others.
 
-- **Frontend**: Flutter (with Dart). Use packages like:
-  - Custom GestureDetector/Draggable for swipe mechanics and animations.
-  - `provider` for state management.
-  - `fl_chart` for infographics (charts, pies, etc.).
-  - `shared_preferences` for local data (streaks, user prefs).
-- **Backend**: Supabase (free tier for MVP). Handles auth (anonymous), database (questions/answers), and real-time stats.
-  - Database: Supabase PostgreSQL for questions, user answers (anonymized), and profile data.
-  - Authentication: Anonymous auth to track devices without logins.
-  - Use `supabase_flutter` package for client integration (auth, database, realtime).
-- **Other Tools**:
-  - Navigation: Built-in Navigator.
-  - Testing: Flutter's built-in unit tests.
-- **Assumptions**: You're building from scratch. Use Dart's null safety and follow Flutter best practices.
+### Key Features
 
-### Core Features and Implementation Details
+- ✅ **Instant Start**: No login required - start swiping immediately with anonymous auth
+- ✅ **Three Question Types**:
+  - Binary (Yes/No)
+  - Multiple Choice (3-6 options)
+  - Slider/Range (numerical scale)
+- ✅ **Real-time Analytics**: See how your answers compare with charts and insights
+- ✅ **Daily Streaks**: Track your progress with gamification (5 questions/day goal)
+- ✅ **Privacy First**: All responses are anonymous with optional profile data
+- ✅ **Clean UI**: Modern Material Design 3 with smooth animations
 
-Implement the following in priority order. Structure the app with minimal screens: Home (swipe feed) and Settings (privacy toggles).
+## Tech Stack
 
-1. **Onboarding and Core Swipe Interface**:
-   - **Flow**: App opens to a swipeable stack of question cards. No splash/login—dive right in.
-   - **Question Card UI**: Each card shows a question title and interaction based on type.
-   - **Gestures**:
-     - Left/Right: Answer (directional for binary; cycle for multi).
-     - Up: Skip/opt-out (no penalty).
-   - **Implementation**: Build a custom swipe stack using Stack, GestureDetector, and AnimationController. Fetch questions in batches (e.g., 10 at a time) from Supabase for infinite scroll.
+- **Frontend**: Flutter 3.x (Dart)
+- **Backend**: Supabase (PostgreSQL + Anonymous Auth)
+- **State Management**: Provider
+- **Charts**: fl_chart
+- **Local Storage**: shared_preferences
 
-2. **Question Types and Interactivity**:
-   - Questions stored in Supabase with fields: `id`, `text`, `type`, `options` (array for choices).
-   - **Types** (implement 3 for MVP):
-     - Binary: E.g., "Yes/No". Left = No, Right = Yes.
-     - Multiple-Choice: 3-5 options. Swipe left/right to cycle, swipe down to confirm.
-     - Slider/Scale: Horizontal swipe to adjust (e.g., 1-10). Use Slider widget with gestures.
-   - **Data Seeding**: Pre-populate 200 questions in Supabase. Include variety: Fun, local, trending.
-   - **User-Generated**: Skip for MVP; use pre-seeded only.
+## Project Structure
 
-3. **Infographics After Answering**:
-   - **Trigger**: After answer, transition to infographic screen (auto-advance after 5s or swipe to next).
-   - **Content**: Basic visuals based on aggregates.
-     - Global percentages (pie chart).
-     - "Near You" (use location if permitted; geohash in Supabase).
-     - Simple stats: E.g., "80% agree with you!".
-   - **Implementation**: Query Supabase for aggregates. Render with fl_chart; basic animations.
-   - **Personalization**: Segment by shared user info if available; fallback to global.
+```
+lib/
+├── core/
+│   ├── models/          # Data models (QuizItem, Analytics, etc.)
+│   ├── services/        # API integration (Supabase)
+│   └── state/           # State management (Providers)
+└── ui/
+    ├── components/      # Reusable widgets
+    └── screens/         # Main app screens
+```
 
-4. **Gamification**:
-   - **Daily Streak**: Track answers per day (shared_preferences + Supabase sync). Goal: 5 questions/day. Show simple toast: "Streak: 3/5".
-     - Reset at midnight (device time).
-     - Reward: "Streak Summary" infographic after 5.
-   - **Implementation**: Use Provider for state; sync to Supabase.
+## Getting Started
 
-5. **Anonymous Answering with Gradual Data Collection**:
-   - **Anonymity**: Answers stored with device ID only.
-   - **Profile Building**: Every 10-20 questions, insert "About You" question (e.g., "Age group?"). Optional; swipe up to skip.
-     - Store in user doc (e.g., { ageGroup: '25-34' }).
-   - **Location**: Request permission once (via `geolocator` package); use for "near you". Fallback to global.
-   - **Settings**: Toggles for data sharing; "Delete My Data" button.
+### Prerequisites
 
-6. **Minimal Polish**:
-   - **Navigation**: Basic bottom navigation for Feed and Settings.
-   - **Error Handling**: Basic offline fallbacks (cache questions locally).
-   - **Themes**: Simple light theme only.
+- Flutter SDK (3.0+)
+- Dart SDK (3.0+)
+- Supabase account (free tier works)
 
-### Development Guidelines
+### Installation
 
-- **Structure**: Organize code: `/widgets` (QuestionCard, Infographic), `/screens`, `/services` (Supabase wrappers), `/providers` (state).
-- **Best Practices**:
-  - Responsive design with MediaQuery.
-  - Performance: Use const widgets.
-  - Security: Validate inputs.
-- **Timeline and Milestones** (Suggested):
-  1. Setup project (Flutter + Supabase): 1 day.
-  2. Core swipe + question types: 3 days.
-  3. Infographics + data: 2 days.
-  4. Gamification + profile: 2 days.
-  5. Testing: 1 day.
-- **Testing**: Unit test key widgets; manual test on emulators. Focus on core loop and edges.
-- **Extensions for Future**: Note but don't implement: Sharing, ads.
+1. **Clone the repository**
+```bash
+git clone <your-repo-url>
+cd quiz-swipe
+```
 
-### Output and Deliverables
+2. **Install dependencies**
+```bash
+flutter pub get
+```
 
-- Build a working MVP repo (e.g., on GitHub).
-- Provide setup instructions (e.g., `flutter run`, Supabase config).
-- Include screenshots.
-- Document any trade-offs.
-- Suggest next steps like basic testing.
+3. **Setup Supabase**
 
-Proceed step-by-step: Plan architecture, implement core loop first, then add features. Aim for independence. Let's make this app addictive and insightful!
+Follow the instructions in `SUPABASE_SETUP.md` to:
+- Create tables
+- Set up authentication
+- Seed sample questions
+- Get API keys
+
+4. **Configure environment**
+
+Option A: Use environment variables
+```bash
+flutter run --dart-define=SUPABASE_URL=your_url --dart-define=SUPABASE_ANON_KEY=your_key
+```
+
+Option B: Edit `lib/main.dart` and replace placeholders
+```dart
+const endpoint = 'https://your-project.supabase.co';
+const apiKey = 'your-anon-key';
+```
+
+5. **Run the app**
+```bash
+flutter run
+```
+
+## Database Schema
+
+The app uses three main tables:
+
+- **questions**: Stores quiz questions with type and options
+- **answers**: Records user responses (anonymized)
+- **user_profiles**: Optional demographic data
+
+See `SUPABASE_SETUP.md` for complete schema and setup SQL.
+
+## Features in Detail
+
+### Question Flow
+
+1. User sees a question card with smooth animations
+2. User interacts based on question type:
+   - **Binary**: Tap Yes/No buttons or skip
+   - **Multiple Choice**: Cycle through options and confirm
+   - **Slider**: Adjust value and submit
+3. Answer is saved anonymously
+4. Analytics screen shows:
+   - User's choice highlighted
+   - Percentage agreement
+   - Pie chart distribution
+   - Smart insights
+5. Auto-advance to next question after 6 seconds (or tap to continue)
+
+### Gamification
+
+- Daily streak counter (resets at midnight)
+- Progress toward 5 questions/day goal
+- Visual feedback with fire icon
+- Persistent across app sessions
+
+### Privacy
+
+- Anonymous authentication (no email/password)
+- Device ID used for tracking (not personally identifiable)
+- Optional age group and region collection (every 15 questions)
+- Toggle to disable data sharing
+- One-tap data deletion
+
+## Development
+
+### Code Style
+
+- Uses Dart null safety
+- Follows Flutter best practices
+- Responsive design with MediaQuery
+- Const constructors where possible
+
+### Key Classes
+
+- `QuizSessionManager`: Manages question queue and streak tracking
+- `PersonaManager`: Handles user profile data
+- `DataRepository`: Supabase API wrapper
+- `InteractiveQuizDisplay`: Main question card widget
+- `AnalyticsDisplay`: Results visualization
+
+## Testing
+
+Run tests with:
+```bash
+flutter test
+```
+
+Test on emulator/device:
+```bash
+# Android
+flutter run -d android
+
+# iOS (requires macOS)
+flutter run -d ios
+```
+
+## Building for Production
+
+### Android
+```bash
+flutter build apk --release
+```
+
+### iOS
+```bash
+flutter build ios --release
+```
+
+## Roadmap
+
+### Future Enhancements (Not in MVP)
+
+- [ ] Social sharing of results
+- [ ] User-generated questions
+- [ ] Advanced filtering (by category, popularity)
+- [ ] Push notifications for streak reminders
+- [ ] Offline mode with local caching
+- [ ] Multi-language support
+- [ ] Dark theme
+- [ ] Achievement badges
+
+## Troubleshooting
+
+**Issue**: App crashes on startup
+- Verify Supabase credentials are correct
+- Check internet connection
+- Ensure anonymous auth is enabled in Supabase
+
+**Issue**: No questions loading
+- Verify questions table has data (run seed SQL)
+- Check Supabase RLS policies are set correctly
+- Look at console logs for API errors
+
+**Issue**: Analytics not showing
+- Ensure `get_question_stats` function is created in Supabase
+- Verify answers are being saved (check answers table)
+
+## License
+
+MIT License - feel free to use for personal or commercial projects
+
+## Contributing
+
+Contributions welcome! Please open an issue first to discuss changes.
+
+## Acknowledgments
+
+- Built with Flutter and Supabase
+- Charts powered by fl_chart
+- Inspired by swipe-based UX patterns
